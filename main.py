@@ -35,7 +35,6 @@ def main():
 
     @app.route("/")
     def index():
-        session = db_session.create_session()
         return render_template("index.html")
 
     @app.route('/logout')
