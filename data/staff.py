@@ -26,6 +26,6 @@ class StaffForm(FlaskForm):
     surname = StringField('Фамилия', validators=[DataRequired()])
     is_male = RadioField('Пол', choices=[('1', 'Мужской'), ('0', 'Женский')], default='1')
     email = EmailField('E-mail', validators=[DataRequired()])
-    building = SelectField('Отдел', validators=[DataRequired()])
+    department = SelectField('Отдел', validators=[DataRequired()])
     photo = FileField('Фото')
     submit = SubmitField('Применить')

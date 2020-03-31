@@ -2,16 +2,14 @@
 
 {% block content %}
 <h1 align="center">Меню</h1>
-{% if current_user.is_authenticated %}
-    <div class="d-flex justify-content-center">
-        <div class="btn-group-vertical" align="center" style="width: 200px;">
-        {% if current_user.is_admin %}
-            <a href="users" class="btn btn-secondary">Пользователи</a><br/>
-            <a href="departments" class="btn btn-secondary">Отделы</a><br/>
-            <a href="buildings" class="btn btn-secondary">Здания</a><br/>
-        {% endif %}
-            <a href="staff" class="btn btn-secondary">Сотрудники</a>
-        </div>
+<div class="d-flex justify-content-center">
+    <div class="btn-group-vertical" align="center" style="width: 200px;">
+    {% if current_user.is_admin %}
+        <a href="users" class="btn btn-secondary">Пользователи</a><br/>
+        <a href="departments" class="btn btn-secondary">Отделы</a><br/>
+        <a href="buildings" class="btn btn-secondary">Здания</a><br/>
+    {% endif %}
+        <a href="staff" class="btn btn-secondary">Сотрудники</a>
     </div>
-{% endif %}
+</div>
 {% endblock %}

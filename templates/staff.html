@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <a href="staff_edit" class="btn btn-secondary">Добавить сотрудника</a>
+    <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Имя</th>
+              <th scope="col">Фамилия</th>
+              <th scope="col">Пол</th>
+              <th scope="col">E-mail</th>
+              <th scope="col">Отдел</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for item in staff%}
+            <tr>
+              <th scope="row">{{ loop.index }}</th>
+              <td>{{ item.name }}</td>
+              <td>{{ item.surname }}</td>
+              <td>{% if item.is_male %} Мужской {% else %} Женский {% endif %}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.department.name }}</td>
+                <td>
+                    <a href="/staff_edit/{{ item.id }}" class="btn btn-warning">Изменить</a>
+                    <a href="/staff_delete/{{ item.id }}" class="btn btn-danger">Удалить</a>
+                </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+    </table>
+{% endblock %}

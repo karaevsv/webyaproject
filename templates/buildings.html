@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 align="center">{{ title }}</h1>
+    <a href="building_edit" class="btn btn-secondary">Добавить здание</a>
+    <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Название</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for item in buildings%}
+            <tr>
+              <th scope="row">{{ loop.index }}</th>
+              <td>{{ item.name }}</td>
+                <td>
+                    <a href="/building_edit/{{ item.id }}" class="btn btn-warning">Изменить</a>
+                    <a href="/building_delete/{{ item.id }}" class="btn btn-danger">Удалить</a>
+                </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+    </table>
+{% endblock %}
