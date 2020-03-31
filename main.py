@@ -86,7 +86,7 @@ def main():
 
     @app.route('/building_edit', methods=['GET', 'POST'])
     @login_required
-    def add_building():
+    def building_add():
         session = db_session.create_session()
         form = BuildingsForm()
         if form.validate_on_submit():
@@ -97,6 +97,37 @@ def main():
             return redirect('/buildings')
         return render_template('building_edit.html', title='Добавление здания',
                                form=form)
+
+    @app.route('/building_edit/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    def building_edit(id):
+        session = db_session.create_session()
+        form = BuildingsForm()
+        building = session.query(Building).filter(Building.id == id).first()
+        if not building:
+            abort(404)
+
+        if request.method == "GET":
+            form.name.data = building.name
+
+        if form.validate_on_submit():
+            building.name = form.name.data
+            session.commit()
+            return redirect('/buildings')
+        return render_template('building_edit.html', title='Редактирование здания',
+                               form=form)
+
+    @app.route('/building_delete/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    def building_delete(id):
+        session = db_session.create_session()
+        building = session.query(Building).filter(Building.id == id).first()
+        if building:
+            session.delete(building)
+            session.commit()
+        else:
+            abort(404)
+        return redirect('/buildings')
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
