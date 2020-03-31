@@ -18,7 +18,6 @@ class Staff(SqlAlchemyBase):
     email = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
     department_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('departments.id'))
     department = orm.relation('Department')
-    photo = sqlalchemy.Column(sqlalchemy.BLOB, nullable=True)
 
 
 class StaffForm(FlaskForm):
@@ -26,6 +25,5 @@ class StaffForm(FlaskForm):
     surname = StringField('Фамилия', validators=[DataRequired()])
     is_male = RadioField('Пол', choices=[('1', 'Мужской'), ('0', 'Женский')], default='1')
     email = EmailField('E-mail', validators=[DataRequired()])
-    department = SelectField('Отдел', validators=[DataRequired()])
-    photo = FileField('Фото')
+    department = SelectField('Отдел', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Применить')

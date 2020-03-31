@@ -59,23 +59,72 @@ def main():
 
     @app.route('/staff_edit', methods=['GET', 'POST'])
     @login_required
-    def add_staff():
+    def staff_add():
         session = db_session.create_session()
         form = StaffForm()
+        form.department.choices = [(x.id, x.name) for x in session.query(Department).all()]
+        if form.department.choices:
+            form.department.default = form.department.choices[0]
+
         if form.validate_on_submit():
             staff = Staff()
             staff.name = form.name.data
             staff.surname = form.surname.data
-            staff.department_id = form.department.data[0]
-            staff.email = form.email
-            staff.is_male = bool(form.is_male.data)
-            # staff.photo = form.photo.data
+            staff.department_id = form.department.data
+            staff.email = form.email.data
+            staff.is_male = True if form.is_male.data == '1' else False
             session.add(staff)
             session.commit()
             return redirect('/staff')
-        form.department.choices = [(x.id, x.name) for x in session.query(Department).all()]
+
         return render_template('staff_edit.html', title='Добавление сотрудника',
                                form=form)
+
+    @app.route('/staff_edit/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    def staff_edit(id):
+        session = db_session.create_session()
+
+        staff = session.query(Staff).filter(Staff.id == id).first()
+        if not staff:
+            abort(404)
+
+        form = StaffForm()
+        form.department.choices = [(x.id, x.name) for x in session.query(Department).all()]
+        if form.department.choices:
+            form.department.default = form.department.choices[0]
+
+        if request.method == "GET":
+            form.name.data = staff.name
+            form.surname.data = staff.surname
+            form.email.data = staff.email
+            form.is_male.data = '1' if staff.is_male else '0'
+            form.department.data = staff.department.id
+
+        if form.validate_on_submit():
+            staff.name = form.name.data
+            staff.surname = form.surname.data
+            staff.department_id = form.department.data
+            staff.email = form.email.data
+            staff.is_male = True if form.is_male.data == '1' else False
+            session.commit()
+            return redirect('/staff')
+
+        return render_template('staff_edit.html', title='Добавление сотрудника',
+                               form=form)
+
+    @app.route('/staff_delete/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    def staff_delete(id):
+        session = db_session.create_session()
+
+        staff = session.query(Staff).filter(Staff.id == id).first()
+        if staff:
+            session.delete(staff)
+            session.commit()
+        else:
+            abort(404)
+        return redirect('/staff')
 
     @app.route('/buildings')
     @login_required
