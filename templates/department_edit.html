@@ -14,8 +14,16 @@
             </p>
         {% endfor %}
     </p>
+    <p>
+        {{ form.building.label }}: {{ form.building}}<br>
+        {% for error in form.building.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}
-    <a href="/buildings", class="btn btn-primary">Отмена</a></p>
+        <a href="/departments", class="btn btn-primary">Отмена</a></p>
     {{message}}
 </form>
 {% endblock %}

@@ -129,6 +129,66 @@ def main():
             abort(404)
         return redirect('/buildings')
 
+    @app.route('/departments')
+    @login_required
+    def departments():
+        session = db_session.create_session()
+        departments = session.query(Department).all()
+        return render_template("departments.html", title='Список отделов', departments=departments)
+
+    @app.route('/department_edit', methods=['GET', 'POST'])
+    @login_required
+    def department_add():
+        session = db_session.create_session()
+        form = DepartmentForm()
+        form.building.choices = [(x.id, x.name) for x in session.query(Building).all()]
+        if form.building.choices:
+            form.building.default = form.building.choices[0]
+        if form.validate_on_submit():
+            department = Department()
+            department.name = form.name.data
+            department.building_id = form.building.data
+            session.add(department)
+            session.commit()
+            return redirect('/departments')
+        return render_template('department_edit.html', title='Добавление отдела',
+                               form=form)
+
+    @app.route('/department_edit/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    def department_edit(id):
+        session = db_session.create_session()
+        form = DepartmentForm()
+        form.building.choices = [(x.id, x.name) for x in session.query(Building).all()]
+        department = session.query(Department).filter(Department.id == id).first()
+        if not department:
+            abort(404)
+
+        if request.method == "GET":
+            form.name.data = department.name
+            form.building.data = department.building.id
+
+        if form.validate_on_submit():
+            department.name = form.name.data
+            department.building_id = form.building.data
+            session.commit()
+            return redirect('/departments')
+
+        return render_template('department_edit.html', title='Редактирование отдела',
+                               form=form)
+
+    @app.route('/department_delete/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    def department_delete(id):
+        session = db_session.create_session()
+        department = session.query(Department).filter(Department.id == id).first()
+        if department:
+            session.delete(department)
+            session.commit()
+        else:
+            abort(404)
+        return redirect('/departments')
+
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 

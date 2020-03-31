@@ -21,5 +21,5 @@ class Department(SqlAlchemyBase):
 
 class DepartmentForm(FlaskForm):
     name = StringField('Название отдела', validators=[DataRequired()])
-    building = SelectField('Здание', validators=[DataRequired()])
+    building = SelectField('Здание', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Применить')

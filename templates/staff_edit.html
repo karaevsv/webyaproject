@@ -25,7 +25,12 @@
     </p>
     <p>
         {{ form.is_male.label }}<br>
-        {{ form.is_male(class="form-control") }}<br>
+        {% for subfield in form.is_male %}
+            <tr>
+                <td>{{ subfield }}</td>
+                <td>{{ subfield.label }}</td>
+            </tr>
+        {% endfor %}
         {% for error in form.is_male.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
@@ -42,22 +47,15 @@
         {% endfor %}
     </p>
     <p>
-        {{ form.is_male.label }}: {{ form.is_male}}<br>
-        {% for error in form.is_male.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
         {{ form.department.label }}: {{ form.department}}<br>
-        {% for error in form.is_male.errors %}
+        {% for error in form.department.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
     </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}
+    <a href="/staff", class="btn btn-primary">Отмена</a></p>
     {{message}}
 </form>
 {% endblock %}
