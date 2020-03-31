@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import os
 from flask_restful import abort
@@ -172,8 +172,11 @@ def main():
         session = db_session.create_session()
         building = session.query(Building).filter(Building.id == id).first()
         if building:
-            session.delete(building)
-            session.commit()
+            if building.departments:
+                flash('Нельзя удалить здание, в котором есть отделы.', 'error')
+            else:
+                session.delete(building)
+                session.commit()
         else:
             abort(404)
         return redirect('/buildings')
@@ -231,9 +234,13 @@ def main():
     def department_delete(id):
         session = db_session.create_session()
         department = session.query(Department).filter(Department.id == id).first()
+
         if department:
-            session.delete(department)
-            session.commit()
+            if department.staff:
+                flash('Нельзя удалить отдел, в котором есть сотрудники.', 'error')
+            else:
+                session.delete(department)
+                session.commit()
         else:
             abort(404)
         return redirect('/departments')
