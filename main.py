@@ -129,6 +129,9 @@ def main():
     @app.route('/buildings')
     @login_required
     def buildings():
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         buildings = session.query(Building).all()
         return render_template("buildings.html", title='Список зданий', buildings=buildings)
@@ -136,6 +139,9 @@ def main():
     @app.route('/building_edit', methods=['GET', 'POST'])
     @login_required
     def building_add():
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         form = BuildingsForm()
         if form.validate_on_submit():
@@ -150,6 +156,9 @@ def main():
     @app.route('/building_edit/<int:id>', methods=['GET', 'POST'])
     @login_required
     def building_edit(id):
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         form = BuildingsForm()
         building = session.query(Building).filter(Building.id == id).first()
@@ -169,6 +178,9 @@ def main():
     @app.route('/building_delete/<int:id>', methods=['GET', 'POST'])
     @login_required
     def building_delete(id):
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         building = session.query(Building).filter(Building.id == id).first()
         if building:
@@ -184,6 +196,9 @@ def main():
     @app.route('/departments')
     @login_required
     def departments():
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         departments = session.query(Department).all()
         return render_template("departments.html", title='Список отделов', departments=departments)
@@ -191,6 +206,9 @@ def main():
     @app.route('/department_edit', methods=['GET', 'POST'])
     @login_required
     def department_add():
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         form = DepartmentForm()
         form.building.choices = [(x.id, x.name) for x in session.query(Building).all()]
@@ -209,6 +227,9 @@ def main():
     @app.route('/department_edit/<int:id>', methods=['GET', 'POST'])
     @login_required
     def department_edit(id):
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         form = DepartmentForm()
         form.building.choices = [(x.id, x.name) for x in session.query(Building).all()]
@@ -232,6 +253,9 @@ def main():
     @app.route('/department_delete/<int:id>', methods=['GET', 'POST'])
     @login_required
     def department_delete(id):
+        if not current_user.is_admin:
+            abort(403)
+
         session = db_session.create_session()
         department = session.query(Department).filter(Department.id == id).first()
 
