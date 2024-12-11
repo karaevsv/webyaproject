@@ -14,7 +14,7 @@ class Building(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
 
-    departments = orm.relation('Department', back_populates='building')
+    departments = orm.relationship('Department', back_populates='building')
 
 
 class BuildingsForm(FlaskForm):

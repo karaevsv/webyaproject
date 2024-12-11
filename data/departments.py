@@ -14,9 +14,9 @@ class Department(SqlAlchemyBase):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
 
     building_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("buildings.id"))
-    building = orm.relation('Building')
+    building = orm.relationship('Building')
 
-    staff = orm.relation('Staff', back_populates='department')
+    staff = orm.relationship('Staff', back_populates='department')
 
 
 class DepartmentForm(FlaskForm):

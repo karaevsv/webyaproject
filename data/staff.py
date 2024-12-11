@@ -1,7 +1,7 @@
 import sqlalchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, RadioField, FileField
-from wtforms.fields.html5 import EmailField
+from wtforms.fields import EmailField
 from wtforms.validators import DataRequired
 from sqlalchemy import orm
 
@@ -17,7 +17,7 @@ class Staff(SqlAlchemyBase):
     is_male = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)
     email = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
     department_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('departments.id'))
-    department = orm.relation('Department')
+    department = orm.relationship('Department')
 
 
 class StaffForm(FlaskForm):
